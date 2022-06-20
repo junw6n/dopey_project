@@ -1,2 +1,2 @@
-# dopey_project
-side project 1 [Dopey]
+# Dopey Project
+side project 1: Dopey
