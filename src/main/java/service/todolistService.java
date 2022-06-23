@@ -94,4 +94,30 @@ public class todolistService {
 
         return result;
     }
+
+    public int setStatus(int id, int status) {
+        int result = 0;
+        try {
+            Class.forName("org.h2.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
+                    "dev", "1234");
+
+            String sql = "update todo set status=? where id=?";
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setInt(1, status);
+            pst.setInt(2, id);
+
+            result = pst.executeUpdate();
+
+            pst.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
 }
