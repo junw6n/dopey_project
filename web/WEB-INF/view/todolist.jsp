@@ -14,9 +14,16 @@
             <c:forEach items="${list}" var="todo">
                 <c:if test="${todo.status eq 0}">
                     <tr>
+                        <td>${todo.id}</td>
                         <td>${todo.title}</td>
                         <td>${todo.description}</td>
                         <td>${todo.status}</td>
+                        <td>
+                            <form action="/todolist/remove" method="post">
+                                <input type="hidden" name="id" value="${todo.id}">
+                                <input type="submit" value="delete">
+                            </form>
+                        </td>
                     </tr>
                 </c:if>
             </c:forEach>
