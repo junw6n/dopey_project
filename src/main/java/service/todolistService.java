@@ -18,10 +18,10 @@ public class todolistService {
             Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
                     "dev", "1234");
 
-            String query = "select * from todo";
+            String sql = "select * from todo";
 
             Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(query);
+            ResultSet rs = st.executeQuery(sql);
 
             while (rs.next()) {
                 Todo todo = new Todo(rs.getInt("id"),
@@ -42,5 +42,31 @@ public class todolistService {
         }
 
         return list;
+    }
+
+    public int addTodo(String title, String description) {
+        int result = 0;
+        try {
+            Class.forName("org.h2.Driver");
+            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
+                    "dev", "1234");
+
+            String sql = "insert into todo (title, description) values (?, ?)";
+
+            PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, title);
+            pst.setString(2, description);
+
+            result = pst.executeUpdate();
+
+            pst.close();
+            conn.close();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 }
