@@ -7,6 +7,8 @@
 <body>
     <header><h1>DOPEY PROJECT</h1></header>
     <main>
+
+        <%-- The section of view --%>
         <h3>Idle</h3>
         <table id="idle">
             <c:forEach items="${list}" var="todo">
@@ -46,6 +48,21 @@
             </c:forEach>
         </table>
 
+        <%-- The section of add --%>
+
+        <form action="/todolist/add" method="post">
+            <table>
+                <tr>
+                    <td>title:</td>
+                    <td><input type="text" name="title"></td>
+                </tr>
+                <tr>
+                    <td>description:</td>
+                    <td><input type="text" name="description"></td>
+                </tr>
+            </table>
+            <input type="submit" value="add todo">
+        </form>
     </main>
 </body>
 </html>
