@@ -1,5 +1,6 @@
 package controller.todolist;
 
+import service.serviceFactory;
 import service.todolistService;
 
 import javax.servlet.ServletException;
@@ -22,7 +23,7 @@ public class setStatusController extends HttpServlet {
         int id_ = Integer.parseInt(id);
         int status_ = Integer.parseInt(status);
 
-        todolistService service = new todolistService();
+        todolistService service = new serviceFactory().todolistServiceFactroy();
 
         int result = service.setStatus(id_, status_);
 

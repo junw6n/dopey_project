@@ -1,6 +1,7 @@
 package controller.todolist;
 
 import entity.Todo;
+import service.serviceFactory;
 import service.todolistService;
 
 import javax.servlet.ServletException;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 public class viewController extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        todolistService service = new todolistService();
+        todolistService service = new serviceFactory().todolistServiceFactroy();
         ArrayList<Todo> list = service.allToDoList();
 
         request.setAttribute("list", list);

@@ -1,17 +1,17 @@
 package service;
 
+import dbconnector.dbConnection;
+import dbconnector.h2Connection;
 import entity.Todo;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class todolistService {
-    private Connection connectionMake() throws ClassNotFoundException, SQLException{
-        Class.forName("org.h2.Driver");
-        Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                "dev", "1234");
+    private dbConnection dbconn;
 
-        return conn;
+    todolistService(dbConnection dbconn) {
+        this.dbconn = dbconn;
     }
 
     public ArrayList<Todo> allToDoList() {
@@ -20,7 +20,7 @@ public class todolistService {
         try {
             String sql = "select * from todo";
 
-            Connection conn = connectionMake();
+            Connection conn = this.dbconn.connectionMake();
 
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -51,7 +51,7 @@ public class todolistService {
         try {
             String sql = "insert into todo (title, description) values (?, ?)";
 
-            Connection conn = connectionMake();
+            Connection conn = this.dbconn.connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, title);
@@ -75,7 +75,7 @@ public class todolistService {
         try {
             String sql = "delete from todo where id=?";
 
-            Connection conn = connectionMake();
+            Connection conn = this.dbconn.connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
@@ -98,7 +98,7 @@ public class todolistService {
         try {
             String sql = "update todo set status=? where id=?";
 
-            Connection conn = connectionMake();
+            Connection conn = this.dbconn.connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, status);

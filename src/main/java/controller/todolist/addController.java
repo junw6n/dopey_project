@@ -1,5 +1,6 @@
 package controller.todolist;
 
+import service.serviceFactory;
 import service.todolistService;
 
 import javax.servlet.ServletException;
@@ -16,7 +17,7 @@ public class addController extends HttpServlet {
         String title = request.getParameter("title");
         String description = request.getParameter("description");
 
-        todolistService service = new todolistService();
+        todolistService service = new serviceFactory().todolistServiceFactroy();
 
         int result = service.addTodo(title, description);
 

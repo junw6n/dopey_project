@@ -1,5 +1,7 @@
 package service;
 
+import dbconnector.dbConnection;
+import dbconnector.h2Connection;
 import entity.Todo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +23,8 @@ class todolistServiceTest {
 
     @BeforeEach
     void setUp() {
-        this.service = new todolistService();
+        dbConnection dbconn = new h2Connection();
+        this.service = new todolistService(dbconn);
         this.todo1 = new Todo(1, "work out - 22.06.21", "legs", 0);
         this.todo2 = new Todo(2, "work out - 22.06.23", "chest, arms", 0);
         this.todo3 = new Todo(3, "read book 2", "\"object-oriented programming\"", 0);
