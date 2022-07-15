@@ -1,123 +1,78 @@
 package service;
 
+import dbconnector.dbConnection;
 import entity.Todo;
+import service.template.callback.queryTemplateCallback;
+import service.template.callback.updateTemplateCallback;
+import service.template.template;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class todolistService {
-    // allToDoList
-    // addToDo
-    // removeToDo
-    // modifyToDo
+    private final template tem;
+
+    public todolistService(dbConnection conn) {
+        this.tem = new template(conn);
+    }
+
     public ArrayList<Todo> allToDoList() {
-        ArrayList<Todo> list = new ArrayList<>();
+        return this.tem.queryTemplate(new queryTemplateCallback() {
+            @Override
+            public ArrayList<Todo> callback(Statement st, ResultSet rs) throws SQLException {
+                ArrayList<Todo> list = new ArrayList<>();
+                String sql = "select * from todo";
 
-        try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
+                rs = st.executeQuery(sql);
 
-            String sql = "select * from todo";
+                while (rs.next()) {
+                    Todo todo = new Todo(rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getInt("status"));
 
-            Statement st = conn.createStatement();
-            ResultSet rs = st.executeQuery(sql);
-
-            while (rs.next()) {
-                Todo todo = new Todo(rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getInt("status"));
-
-                list.add(todo);
+                    list.add(todo);
+                }
+                return list;
             }
-
-            rs.close();
-            st.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return list;
+        });
     }
 
     public int addTodo(String title, String description) {
-        int result = 0;
-        try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
-            String sql = "insert into todo (title, description) values (?, ?)";
-
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setString(1, title);
-            pst.setString(2, description);
-
-            result = pst.executeUpdate();
-
-            pst.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "insert into todo (title, description) values (?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, title);
+                pst.setString(2, description);
+                return pst;
+            }
+        });
     }
 
     public int removeTodo(int id) {
-        int result = 0;
-        try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
-            String sql = "delete from todo where id=?";
-
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setInt(1, id);
-
-            result = pst.executeUpdate();
-
-            pst.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "delete from todo where id=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, id);
+                return pst;
+            }
+        });
     }
 
     public int setStatus(int id, int status) {
-        int result = 0;
-        try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
-            String sql = "update todo set status=? where id=?";
-
-            PreparedStatement pst = conn.prepareStatement(sql);
-            pst.setInt(1, status);
-            pst.setInt(2, id);
-
-            result = pst.executeUpdate();
-
-            pst.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        return result;
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "update todo set status=? where id=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, status);
+                pst.setInt(2, id);
+                return pst;
+            }
+        });
     }
 }

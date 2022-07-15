@@ -1,5 +1,6 @@
 package controller.todolist;
 
+import service.serviceFactory;
 import service.todolistService;
 
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ public class removeController extends HttpServlet {
 
         int id_ = Integer.parseInt(id);
 
-        todolistService service = new todolistService();
+        todolistService service = new serviceFactory().todolistServiceFactroy();
 
         int result = service.removeTodo(id_);
 
