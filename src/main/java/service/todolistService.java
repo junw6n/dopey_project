@@ -6,19 +6,21 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class todolistService {
-    // allToDoList
-    // addToDo
-    // removeToDo
-    // modifyToDo
+    private Connection connectionMake() throws ClassNotFoundException, SQLException{
+        Class.forName("org.h2.Driver");
+        Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
+                "dev", "1234");
+
+        return conn;
+    }
+
     public ArrayList<Todo> allToDoList() {
         ArrayList<Todo> list = new ArrayList<>();
 
         try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
             String sql = "select * from todo";
+
+            Connection conn = connectionMake();
 
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
@@ -47,11 +49,9 @@ public class todolistService {
     public int addTodo(String title, String description) {
         int result = 0;
         try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
             String sql = "insert into todo (title, description) values (?, ?)";
+
+            Connection conn = connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setString(1, title);
@@ -73,11 +73,9 @@ public class todolistService {
     public int removeTodo(int id) {
         int result = 0;
         try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
             String sql = "delete from todo where id=?";
+
+            Connection conn = connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, id);
@@ -98,11 +96,9 @@ public class todolistService {
     public int setStatus(int id, int status) {
         int result = 0;
         try {
-            Class.forName("org.h2.Driver");
-            Connection conn = DriverManager.getConnection("jdbc:h2:~/workspace/tools/h2/base/dopey",
-                    "dev", "1234");
-
             String sql = "update todo set status=? where id=?";
+
+            Connection conn = connectionMake();
 
             PreparedStatement pst = conn.prepareStatement(sql);
             pst.setInt(1, status);
