@@ -1,177 +1,78 @@
 package service;
 
 import dbconnector.dbConnection;
-import dbconnector.h2Connection;
 import entity.Todo;
+import service.template.callback.queryTemplateCallback;
+import service.template.callback.updateTemplateCallback;
+import service.template.template;
 
 import java.sql.*;
 import java.util.ArrayList;
 
 public class todolistService {
-    private final dbConnection dbconn;
+    private final template tem;
 
-    todolistService(dbConnection dbconn) {
-        this.dbconn = dbconn;
+    public todolistService(dbConnection conn) {
+        this.tem = new template(conn);
     }
 
     public ArrayList<Todo> allToDoList() {
-        ArrayList<Todo> list = new ArrayList<>();
+        return this.tem.queryTemplate(new queryTemplateCallback() {
+            @Override
+            public ArrayList<Todo> callback(Statement st, ResultSet rs) throws SQLException {
+                ArrayList<Todo> list = new ArrayList<>();
+                String sql = "select * from todo";
 
-        Connection conn = null;
-        Statement st = null;
-        ResultSet rs = null;
-        try {
-            String sql = "select * from todo";
+                rs = st.executeQuery(sql);
 
-            conn = this.dbconn.connectionMake();
-            st = conn.createStatement();
-            rs = st.executeQuery(sql);
+                while (rs.next()) {
+                    Todo todo = new Todo(rs.getInt("id"),
+                            rs.getString("title"),
+                            rs.getString("description"),
+                            rs.getInt("status"));
 
-            while (rs.next()) {
-                Todo todo = new Todo(rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("description"),
-                        rs.getInt("status"));
-
-                list.add(todo);
+                    list.add(todo);
+                }
+                return list;
             }
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (SQLException e) { }
-            }
-            if (st != null) {
-                try {
-                    st.close();
-                } catch (SQLException e) { }
-            }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) { }
-            }
-        }
-
-        return list;
+        });
     }
 
     public int addTodo(String title, String description) {
-        int result = 0;
-
-        Connection conn = null;
-        PreparedStatement pst = null;
-        try {
-            String sql = "insert into todo (title, description) values (?, ?)";
-
-            conn = this.dbconn.connectionMake();
-
-            pst = conn.prepareStatement(sql);
-            pst.setString(1, title);
-            pst.setString(2, description);
-
-            result = pst.executeUpdate();
-
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pst != null) {
-                try {
-                    pst.close();
-                } catch (SQLException e) {
-                }
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "insert into todo (title, description) values (?, ?)";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setString(1, title);
+                pst.setString(2, description);
+                return pst;
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-
-        return result;
+        });
     }
 
     public int removeTodo(int id) {
-        int result = 0;
-        Connection conn = null;
-        PreparedStatement pst = null;
-        try {
-            String sql = "delete from todo where id=?";
-
-            conn = this.dbconn.connectionMake();
-
-            pst = conn.prepareStatement(sql);
-            pst.setInt(1, id);
-
-            result = pst.executeUpdate();
-
-            pst.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pst != null) {
-                try {
-                    pst.close();
-                } catch (SQLException e) {
-                }
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "delete from todo where id=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, id);
+                return pst;
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-
-        return result;
+        });
     }
 
     public int setStatus(int id, int status) {
-        int result = 0;
-        Connection conn = null;
-        PreparedStatement pst = null;
-        try {
-            String sql = "update todo set status=? where id=?";
-
-            conn = this.dbconn.connectionMake();
-
-            pst = conn.prepareStatement(sql);
-            pst.setInt(1, status);
-            pst.setInt(2, id);
-
-            result = pst.executeUpdate();
-
-            pst.close();
-            conn.close();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            if (pst != null) {
-                try {
-                    pst.close();
-                } catch (SQLException e) {
-                }
+        return this.tem.updateTemplate(new updateTemplateCallback() {
+            @Override
+            public PreparedStatement callback(Connection conn) throws SQLException {
+                String sql = "update todo set status=? where id=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                pst.setInt(1, status);
+                pst.setInt(2, id);
+                return pst;
             }
-            if (conn != null) {
-                try {
-                    conn.close();
-                } catch (SQLException e) {
-                }
-            }
-        }
-
-        return result;
+        });
     }
 }
