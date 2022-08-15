@@ -1,15 +1,15 @@
-package entity;
+package domain;
 
 public class Todo {
     private int id;
     private String title;
     private String description;
-    private int status;
+    private TodoStatus status;
 
     public Todo() {
     }
 
-    public Todo(int id, String title, String description, int status) {
+    public Todo(int id, String title, String description, TodoStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
@@ -34,7 +34,7 @@ public class Todo {
 
     public void setDescription(String description) { this.description = description; }
 
-    public int getStatus() { return status; }
+    public TodoStatus getStatus() { return status; }
 
-    public void setStatus(int status) { this.status = status; }
+    public void setStatus(TodoStatus status) { this.status = status; }
 }

@@ -2,7 +2,9 @@ package service;
 
 import dbconnector.dbConnection;
 import dbconnector.h2Connection;
-import entity.Todo;
+import domain.Todo;
+import domain.TodoService;
+import domain.TodoStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -10,8 +12,8 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class todolistServiceTest {
-    private todolistService service;
+class TodoServiceTest {
+    private TodoService service;
     private Todo todo1;
     private Todo todo2;
     private Todo todo3;
@@ -24,10 +26,10 @@ class todolistServiceTest {
     @BeforeEach
     void setUp() {
         dbConnection dbconn = new h2Connection();
-        this.service = new todolistService(dbconn);
-        this.todo1 = new Todo(1, "work out - 22.06.21", "legs", 0);
-        this.todo2 = new Todo(2, "work out - 22.06.23", "chest, arms", 0);
-        this.todo3 = new Todo(3, "read book 2", "\"object-oriented programming\"", 0);
+        this.service = new TodoService(dbconn);
+        this.todo1 = new Todo(1, "work out - 22.06.21", "legs", TodoStatus.IDLE);
+        this.todo2 = new Todo(2, "work out - 22.06.23", "chest, arms", TodoStatus.IDLE);
+        this.todo3 = new Todo(3, "read book 2", "\"object-oriented programming\"", TodoStatus.IDLE);
     }
     @Test
     void allToDoList() {

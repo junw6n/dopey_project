@@ -1,9 +1,9 @@
-package service.template;
+package domain.template;
 
 import dbconnector.dbConnection;
-import entity.Todo;
-import service.template.callback.queryTemplateCallback;
-import service.template.callback.updateTemplateCallback;
+import domain.Todo;
+import domain.template.callback.queryTemplateCallback;
+import domain.template.callback.updateTemplateCallback;
 
 import java.sql.*;
 import java.util.ArrayList;
