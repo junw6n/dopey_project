@@ -1,18 +1,17 @@
-package service;
+package domain;
 
 import dbconnector.dbConnection;
-import entity.Todo;
-import service.template.callback.queryTemplateCallback;
-import service.template.callback.updateTemplateCallback;
-import service.template.template;
+import domain.template.callback.queryTemplateCallback;
+import domain.template.callback.updateTemplateCallback;
+import domain.template.template;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class todolistService {
+public class TodoService {
     private final template tem;
 
-    public todolistService(dbConnection conn) {
+    public TodoService(dbConnection conn) {
         this.tem = new template(conn);
     }
 
@@ -29,7 +28,7 @@ public class todolistService {
                     Todo todo = new Todo(rs.getInt("id"),
                             rs.getString("title"),
                             rs.getString("description"),
-                            rs.getInt("status"));
+                            TodoStatus.valueOf(rs.getInt("status")));
 
                     list.add(todo);
                 }
