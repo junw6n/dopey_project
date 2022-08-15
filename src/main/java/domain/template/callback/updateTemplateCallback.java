@@ -1,4 +1,4 @@
-package service.template.callback;
+package domain.template.callback;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

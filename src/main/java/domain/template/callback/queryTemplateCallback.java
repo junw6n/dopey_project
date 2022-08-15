@@ -1,6 +1,6 @@
-package service.template.callback;
+package domain.template.callback;
 
-import entity.Todo;
+import domain.Todo;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
