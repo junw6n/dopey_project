@@ -1,44 +1,41 @@
 package application;
 
 import domain.Todo;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import domain.serviceFactory;
+import org.springframework.web.bind.annotation.*;
 import domain.TodoService;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Controller
+@RequestMapping("/todolist")
 public class TodoController {
-    private TodoService service = new serviceFactory().todolistServiceFactroy();
+    @Autowired private TodoService service;
 
-    @GetMapping("/todolist")
+    @GetMapping()
     public String view(Model model) {
-        ArrayList<Todo> list = service.allToDoList();
+        List<Todo> list = service.getAll();
         model.addAttribute("list", list);
         return "todolist";
     }
 
-    @PostMapping("/todolist/add")
-    public String add(@RequestParam("title") String title,
-                      @RequestParam("description") String description) {
-        service.addTodo(title, description);
+    @PostMapping("/add")
+    public String add(@ModelAttribute Todo todo) {
+        service.add(todo);
         return "redirect:/todolist";
     }
 
-    @PostMapping("/todolist/remove")
-    public String remove(@RequestParam("id") int id) {
-        service.removeTodo(id);
+    @PostMapping("/remove")
+    public String remove(@ModelAttribute Todo todo) {
+        service.remove(todo);
         return "redirect:/todolist";
     }
 
-    @PostMapping("/todolist/setStatus")
-    public String setStatus(@RequestParam("id") int id,
-                            @RequestParam("status") int status) {
-        service.setStatus(id, status);
+    @PostMapping("/setStatus")
+    public String setStatus(@ModelAttribute Todo todo) {
+        service.setStatus(todo);
         return "redirect:/todolist";
     }
 }

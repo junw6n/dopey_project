@@ -46,7 +46,7 @@
             </tr>
         </thead>
         <c:forEach items="${list}" var="todo">
-            <c:if test="${todo.status eq 0}">
+            <c:if test="${todo.status.intValue() eq 0}">
                 <tr>
                     <td>${todo.title}</td>
                     <td>${todo.description}</td>
@@ -83,7 +83,7 @@
         </tr>
         </thead>
         <c:forEach items="${list}" var="todo">
-            <c:if test="${todo.status eq 1}">
+            <c:if test="${todo.status.intValue() eq 1}">
                 <tr>
                     <td>${todo.title}</td>
                     <td>${todo.description}</td>
@@ -120,7 +120,7 @@
         </tr>
         </thead>
         <c:forEach items="${list}" var="todo">
-            <c:if test="${todo.status eq 2}">
+            <c:if test="${todo.status.intValue() eq 2}">
                 <tr>
                     <td>${todo.title}</td>
                     <td>${todo.description}</td>

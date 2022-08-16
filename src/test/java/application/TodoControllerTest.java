@@ -56,7 +56,7 @@ public class TodoControllerTest {
     public void change_todo_status() throws Exception {
         this.mockMvc.perform(post("/todolist/setStatus")
                 .param("id", "1")
-                .param("status", String.valueOf(TodoStatus.IDLE.intValue())))
+                .param("status", String.valueOf(TodoStatus.IN_PROGRESS.intValue())))
                 .andExpect(redirectedUrl("/todolist"));
     }
 }
