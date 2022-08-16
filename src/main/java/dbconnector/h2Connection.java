@@ -1,9 +1,13 @@
 package dbconnector;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@Component
 public class h2Connection implements dbConnection{
     @Override
     public Connection connectionMake() throws ClassNotFoundException, SQLException {

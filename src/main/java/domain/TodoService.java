@@ -4,13 +4,17 @@ import dbconnector.dbConnection;
 import domain.template.callback.queryTemplateCallback;
 import domain.template.callback.updateTemplateCallback;
 import domain.template.template;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.ArrayList;
 
+@Service
 public class TodoService {
     private final template tem;
 
+    @Autowired
     public TodoService(dbConnection conn) {
         this.tem = new template(conn);
     }
