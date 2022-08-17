@@ -1,7 +1,7 @@
 package domain;
 
 public class Todo {
-    private int id;
+    private Integer id;
     private String title;
     private String description;
     private TodoStatus status;
@@ -9,18 +9,18 @@ public class Todo {
     public Todo() {
     }
 
-    public Todo(int id, String title, String description, TodoStatus status) {
+    public Todo(Integer id, String title, String description, TodoStatus status) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) { this.id = id; }
+    public void setId(Integer id) { this.id = id; }
 
     public String getTitle() { return title; }
 
