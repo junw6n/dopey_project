@@ -31,7 +31,7 @@ public class TodoControllerTest {
 
     private TodoService service;
 
-    private Todo sampleTodo;
+    private Todo sample;
 
     @Before
     @DirtiesContext
@@ -42,8 +42,8 @@ public class TodoControllerTest {
 
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
 
-//        sampleTodo = new Todo(1, "title: test", "desc: test", TodoStatus.IDLE);
-        sampleTodo = mock(Todo.class);
+//        sample = new Todo(1, "title: test", "desc: test", TodoStatus.IDLE);
+        sample = mock(Todo.class);
     }
 
     @Test
@@ -56,22 +56,22 @@ public class TodoControllerTest {
     @Test
     public void add_todo() throws Exception {
         mockMvc.perform(post("/todolist/add")
-                .param("title", sampleTodo.getTitle())
-                .param("description", sampleTodo.getDescription()))
+                .param("title", sample.getTitle())
+                .param("description", sample.getDescription()))
                 .andExpect(redirectedUrl("/todolist"));
     }
 
     @Test
     public void remove_todo() throws Exception {
         mockMvc.perform(post("/todolist/remove")
-                .param("id", String.valueOf(sampleTodo.getId())))
+                .param("id", String.valueOf(sample.getId())))
                 .andExpect(redirectedUrl("/todolist"));
     }
 
     @Test
     public void change_todo_status() throws Exception {
         mockMvc.perform(post("/todolist/setStatus")
-                .param("id", String.valueOf(sampleTodo.getId()))
+                .param("id", String.valueOf(sample.getId()))
                 .param("status", String.valueOf(TodoStatus.IN_PROGRESS.intValue())))
                 .andExpect(redirectedUrl("/todolist"));
     }

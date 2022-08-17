@@ -4,12 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
 @Service
+@Transactional
 public class TodoService {
     private final JdbcTemplate jdbcTemplate;
 
@@ -30,12 +32,12 @@ public class TodoService {
         }
     };
 
-    public List<Todo> getAll() {
-        return this.jdbcTemplate.query("select * from todo", this.todoRowMapper);
-    }
 
     public int add(Todo todo) {
-        return this.jdbcTemplate.update("insert into todo (title, description) values (?, ?)", todo.getTitle(), todo.getDescription());
+        if (todo.getId() == null)
+            return this.jdbcTemplate.update("insert into todo (title, description) values (?, ?)", todo.getTitle(), todo.getDescription());
+        else
+            return this.jdbcTemplate.update("insert into todo (id, title, description) values (?, ?, ?)", todo.getId(), todo.getTitle(), todo.getDescription());
     }
 
     public int remove(Todo todo) {
@@ -44,5 +46,20 @@ public class TodoService {
 
     public int setStatus(Todo todo) {
         return this.jdbcTemplate.update("update todo set status=? where id=?", todo.getStatus().intValue(), todo.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public Todo get(int id) {
+        return this.jdbcTemplate.queryForObject("select * from todo where id=?", this.todoRowMapper, id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Todo> getAll() {
+        return this.jdbcTemplate.query("select * from todo", this.todoRowMapper);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getCount() {
+        return this.jdbcTemplate.queryForObject("select count(*) from todo", Integer.class);
     }
 }
