@@ -38,4 +38,8 @@ public class TodoController {
         service.setStatus(todo);
         return "redirect:/todolist";
     }
+
+    public void setService(TodoService service) {
+        this.service = service;
+    }
 }
